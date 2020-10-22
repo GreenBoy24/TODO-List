@@ -1,0 +1,74 @@
+databaseChangeLog:
+  - logicalFilePath: db/changelog/db.changelog-master.yaml
+  - changeSet:
+      id: 1
+      author: petr
+      changes:
+        - createTable:
+            tableName: ToDoList
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(200)
+                  constraints:
+                    unique: true
+                    nullable: false
+              - column:
+                  name: createdDate
+                  type: date
+                  constraints:
+                    nullable: false
+              - column:
+                  name: changedDate
+                  type: date
+                  constraints:
+                    nullable: false
+
+        - createTable:
+            tableName: task
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(200)
+                  constraints:
+                    unique: true
+                    nullable: false
+              - column:
+                  name: createdDate
+                  type: date
+                  constraints:
+                    nullable: false
+              - column:
+                  name: changedDate
+                  type: date
+                  constraints:
+                    nullable: false
+              - column:
+                  name: title
+                  type: varchar(1000)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: completed
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: priority
+                  type: bigint
+                  constraints:
+                    nullable: false
