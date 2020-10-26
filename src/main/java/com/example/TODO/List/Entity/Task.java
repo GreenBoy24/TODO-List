@@ -4,57 +4,62 @@ import javax.persistence.*;
 import java.util.Date;
 import java.util.UUID;
 
+/**
+ * Java-doc
+ */
 @Entity
+// TODO: лучше принудительно указать в какой балице лежат данные
 public class Task {
     private UUID id;
     private String name;
     private String title;
-    private Integer completed;
+    private Integer completed; // TODO: есть же значения- выполнено/не выполнено? зачем int? это же boolean
     private Date createdDate;
     private Date changedDate;
-    private Integer priority;
+    private Integer priority; // TODO: приоритет лучше сделать перечислением
 
-    @Id
-    @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    // TODO: чтоб не писать методы гет и сет, можно воспольщзоваться аннотациями @Getter и @Setter
+
+    @Id // TODO: Это лучше начелисть на поле а не на метод
+    @Column(name = "id") // TODO: Это лучше начелисть на поле а не на метод
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // TODO: лучше принудитеотно вкоде генерить ID
     public UUID getId() {
         return id;
     }
 
-    @Basic
-    @Column(name = "name")
+    @Basic // TODO: Это лучше начелисть на поле а не на метод
+    @Column(name = "name")// TODO: Это лучше начелисть на поле а не на метод
     public String getName() {
         return name;
     }
 
-    @Basic
-    @Column(name = "title")
+    @Basic// TODO: Это лучше начелисть на поле а не на метод
+    @Column(name = "title")// TODO: Это лучше начелисть на поле а не на метод
     public String getTitle() {
         return title;
     }
 
-
-    @Basic
-    @Column(name = "completed")
+    @Basic// TODO: Это лучше начелисть на поле а не на метод
+    @Column(name = "completed")// TODO: Это лучше начелисть на поле а не на метод
     public Integer getCompleted() {
         return completed;
     }
 
 
-    @Basic
-    @Column(name = "createdDate")
+    @Basic// TODO: Это лучше начелисть на поле а не на метод
+    @Column(name = "createdDate")// TODO: Это лучше начелисть на поле а не на метод
     public Date  getCreatedDate() {
         return createdDate;
     }
 
-    @Basic
-    @Column(name = "changedDate")
+    @Basic// TODO: Это лучше начелисть на поле а не на метод
+    @Column(name = "changedDate")// TODO: Это лучше начелисть на поле а не на метод
     public Date  getChangedDate() {
         return changedDate;
     }
 
-    @Basic
-    @Column(name = "priority")
+    @Basic// TODO: Это лучше начелисть на поле а не на метод
+    @Column(name = "priority")// TODO: Это лучше начелисть на поле а не на метод
     public Integer getPriority() {
         return priority;
     }

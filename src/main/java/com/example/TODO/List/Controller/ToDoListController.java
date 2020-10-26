@@ -12,16 +12,23 @@ import org.springframework.web.bind.annotation.*;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 
+/**
+ * java-doc
+ */
 @Controller
 @ComponentScan(basePackages = {"com.example.TODO.List.*"})
 @RequestMapping("/List")
 public class ToDoListController {
 
     private final ToDoListService toDoListService;
-
+    // TODO: Где инжектится ToDoListService? @Autowired нет, принудительного вызова конструткора нет,
+    //  указаний в XML тоже нет, присвеоение через setter нет
     public ToDoListController(ToDoListService toDoListService) {
         this.toDoListService = toDoListService;
     }
+
+    // TODO: контроллеры ничего не должны знать про судности модели. для передачи данных туда-сюда есть "петтерн" DTO
+    // в гуглде можно набрать DTO зачем нужны
 
     @PostMapping("/add")
     public ResponseEntity<ToDoList> add(@RequestBody ToDoList toDoList){
@@ -69,4 +76,7 @@ public class ToDoListController {
 
         return new ResponseEntity(HttpStatus.OK);
     }
+
+    // TODO: как понять какие списки у нас есть вообще? не знаем каеие списки есть - не имеем точек входа для просмотра дел
+
 }

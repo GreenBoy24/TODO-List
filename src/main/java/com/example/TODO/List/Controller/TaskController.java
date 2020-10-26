@@ -14,10 +14,14 @@ import java.util.*;
 @RequestMapping("/task")
 public class TaskController {
     private final TaskService taskService;
-
+    // TODO: Где инжектится TaskService? @Autowired нет, принудительного вызова конструткора нет,
+    //  указаний в XML тоже нет, присвеоение через setter нет
     public TaskController(TaskService taskService) {
         this.taskService = taskService;
     }
+
+    // TODO: контроллеры ничего не должны знать про судности модели. для передачи данных туда-сюда есть "петтерн" DTO
+    // в гуглде можно набрать DTO зачем нужны
 
     @PostMapping("/add")
     public ResponseEntity<Task> add(@RequestBody Task task) {
@@ -51,11 +55,14 @@ public class TaskController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<Task>> findAll() {
+    public ResponseEntity<List<Task>> findAll() {// TODO: выбирать дела мы должны из списка, значит номер списка нужен,
+        // зачем нам все дела без списков?
+        // по условиям задачи у нас есть фильтрация и сортировка,
+        // + отсечение лишнего, и сразу кейс: дел в списке у нас 120, как посмотерть 20 дел после 100?
         return ResponseEntity.ok(taskService.findAll());
     }
 
-    @GetMapping("/id/{id}")
+    @GetMapping("/id/{id}") // TODO: зачем тут в пути id, можно обойтись без него
     public ResponseEntity<Task> findById(@PathVariable UUID id) {
 
         Task task = null;

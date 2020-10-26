@@ -9,8 +9,10 @@ import java.util.UUID;
 
 @Service
 public class ToDoListService {
-    private final ToDoListRepository repository;
 
+    private final ToDoListRepository repository;
+    // TODO: Где инжектится ToDoListRepository? @Autowired нет, принудительного вызова конструткора нет,
+    //  указаний в XML тоже нет, присвеоение через setter нет
     public ToDoListService(ToDoListRepository repository) {
         this.repository = repository;
     }
