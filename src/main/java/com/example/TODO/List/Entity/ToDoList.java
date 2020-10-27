@@ -1,37 +1,33 @@
-package com.example.TODO.List.Entity;
+package com.example.todo.list.entity;
+
+import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.UUID;
 
+@Entity
+@Data
+@Table(name = "ToDoList")
 public class ToDoList {
-    private UUID id;
-    private String name;
-    private Date createdDate;
-    private Date changedDate;
 
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public UUID getId() {
-        return id;
-    }
+    private UUID id;
 
     @Basic
+    @NotNull
     @Column(name = "name")
-    public String getName() {
-        return name;
-    }
+    private String name;
 
     @Basic
     @Column(name = "createdDate")
-    public Date  getCreatedDate() {
-        return createdDate;
-    }
+    private Date createdDate;
 
     @Basic
     @Column(name = "changedDate")
-    public Date  getChangedDate() {
-        return changedDate;
-    }
+    private Date changedDate;
+
 }

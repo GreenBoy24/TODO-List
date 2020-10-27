@@ -1,72 +1,62 @@
-package com.example.TODO.List.Controller;
+package com.example.todo.list.controller;
 
-import com.example.TODO.List.Entity.ToDoList;
-import com.example.TODO.List.Functionality.ToDoListService;
+import com.example.todo.list.entity.ToDoList;
+import com.example.todo.list.exception.IncorrectNameException;
+import com.example.todo.list.services.ToDoListService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.NoSuchElementException;
 import java.util.UUID;
 
-@Controller
-@ComponentScan(basePackages = {"com.example.TODO.List.*"})
-@RequestMapping("/List")
+@RestController
+@ComponentScan(basePackages = {"com.example.todo.list.*"})
+@RequestMapping("/list")
 public class ToDoListController {
 
     private final ToDoListService toDoListService;
 
+    @Autowired
     public ToDoListController(ToDoListService toDoListService) {
         this.toDoListService = toDoListService;
     }
 
     @PostMapping("/add")
-    public ResponseEntity<ToDoList> add(@RequestBody ToDoList toDoList){
+    public ResponseEntity<ToDoList> add(@RequestBody ToDoList toDoList) throws IncorrectNameException {
         if (toDoList.getName() == null || toDoList.getName().trim().length() == 0) {
-            return new ResponseEntity("this list not found", HttpStatus.NOT_ACCEPTABLE);
+            throw new IncorrectNameException();
         }
-        return ResponseEntity.ok(toDoListService.add(toDoList));
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PutMapping("/update")
     public ResponseEntity update(@RequestBody ToDoList toDoList){
 
-        if (toDoList.getName() == null || toDoList.getName().trim().length() == 0) {
-            return new ResponseEntity("this list not found", HttpStatus.NOT_ACCEPTABLE);
-        }
+        final boolean updated = toDoListService.update(toDoList);
 
-        toDoListService.update(toDoList);
-
-        return new ResponseEntity(HttpStatus.OK);
+        return updated
+                ? new ResponseEntity<>(HttpStatus.OK)
+                : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
 
-    @GetMapping("/id/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<ToDoList> findById(@PathVariable UUID id) {
 
-        ToDoList toDoList = null;
-        try{
-            toDoList = toDoListService.findById(id);
-        }catch (NoSuchElementException e){
-            e.printStackTrace();
-            return new ResponseEntity("id="+id+" not found", HttpStatus.NOT_ACCEPTABLE);
-        }
-
-        return  ResponseEntity.ok(toDoList);
+        ToDoList toDoList = toDoListService.findById(id);
+        return toDoList != null
+                ? new ResponseEntity<>(toDoList, HttpStatus.OK)
+                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity delete(@PathVariable UUID id) {
 
-        try {
-            toDoListService.deleteById(id);
-        }catch (EmptyResultDataAccessException e){
-            e.printStackTrace();
-            return new ResponseEntity("id="+id+" not found", HttpStatus.NOT_ACCEPTABLE);
-        }
+        final boolean deleted = toDoListService.deleteById(id);
 
-        return new ResponseEntity(HttpStatus.OK);
+        return deleted
+                ? new ResponseEntity<>(HttpStatus.OK)
+                : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
 }

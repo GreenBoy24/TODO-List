@@ -1,15 +1,15 @@
 databaseChangeLog:
   - logicalFilePath: db/changelog/db.changelog-master.yaml
   - changeSet:
-      id: 1
+      id: 20201027_1
       author: petr
       changes:
         - createTable:
-            tableName: ToDoList
+            tableName: todolist
             columns:
               - column:
                   name: id
-                  type: UUID
+                  type: bigint
                   autoIncrement: true
                   constraints:
                     primaryKey: true
@@ -32,11 +32,11 @@ databaseChangeLog:
                     nullable: false
 
         - createTable:
-            tableName: task
+            tableName: tasks
             columns:
               - column:
                   name: id
-                  type: UUID
+                  type: bigint
                   autoIncrement: true
                   constraints:
                     primaryKey: true
@@ -64,7 +64,7 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: completed
-                  type: bigint
+                  type: boolean
                   constraints:
                     nullable: false
               - column:
