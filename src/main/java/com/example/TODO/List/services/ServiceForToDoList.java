@@ -5,6 +5,10 @@ import com.example.todo.list.entity.ToDoList;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Интерфейс класса ToDoList, для сервиса
+ * @author Пётр
+ */
 public interface ServiceForToDoList {
 
     /**

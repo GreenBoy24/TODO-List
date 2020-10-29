@@ -2,11 +2,16 @@ package com.example.todo.list.services;
 
 import com.example.todo.list.entity.ToDoList;
 import com.example.todo.list.repository.ToDoListRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Сервис для класса TodoList
+ * @author Пётр
+ */
 @Service
 public class ToDoListService implements ServiceForToDoList {
 
@@ -47,5 +52,9 @@ public class ToDoListService implements ServiceForToDoList {
     @Override
     public List<ToDoList> findAll() {
         return repository.findAll();
+    }
+
+    public Page findByTitle(PageRequest paging ){
+        return repository.findByTitle(paging);
     }
 }

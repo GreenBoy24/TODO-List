@@ -1,7 +1,7 @@
 databaseChangeLog:
   - logicalFilePath: db/changelog/db.changelog-master.yaml
   - changeSet:
-      id: 20201027_1
+      id: 202010271850_1
       author: petr
       changes:
         - createTable:
@@ -22,17 +22,17 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: createdDate
-                  type: date
+                  type: timestamp
                   constraints:
                     nullable: false
               - column:
                   name: changedDate
-                  type: date
+                  type: timestamp
                   constraints:
                     nullable: false
 
         - createTable:
-            tableName: tasks
+            tableName: task
             columns:
               - column:
                   name: id
@@ -49,12 +49,12 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: createdDate
-                  type: date
+                  type: timestamp
                   constraints:
                     nullable: false
               - column:
                   name: changedDate
-                  type: date
+                  type: timestamp
                   constraints:
                     nullable: false
               - column:

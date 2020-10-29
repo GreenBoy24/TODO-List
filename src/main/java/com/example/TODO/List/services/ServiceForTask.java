@@ -5,6 +5,10 @@ import com.example.todo.list.entity.Task;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Интерфейс класса Task, для сервиса
+ * @author Пётр
+ */
 public interface ServiceForTask {
 
     /**
