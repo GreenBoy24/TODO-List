@@ -1,10 +1,14 @@
 package com.example.todo.list.controller;
 
+import com.example.todo.list.dto.ToDoListDto;
 import com.example.todo.list.entity.ToDoList;
 import com.example.todo.list.exception.IncorrectNameException;
+import com.example.todo.list.mapper.ToDoListMapper;
 import com.example.todo.list.search.ToDoListSearch;
 import com.example.todo.list.services.ToDoListService;
-import org.springframework.beans.factory.annotation.Autowired;
+import liquibase.pro.packaged.T;
+import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,16 +23,13 @@ import java.util.UUID;
  * @autor Пётр
  */
 @RestController
+@RequiredArgsConstructor
 @ComponentScan(basePackages = {"com.example.todo.list.*"})
 @RequestMapping("/list")
 public class ToDoListController {
 
     private final ToDoListService toDoListService;
-
-    @Autowired
-    public ToDoListController(ToDoListService toDoListService) {
-        this.toDoListService = toDoListService;
-    }
+    private final ToDoListMapper toDoListMapper;
 
     @GetMapping(value="")
     public String hello() {
@@ -39,8 +40,12 @@ public class ToDoListController {
      * Метод который добавляет список задач
      */
     @PostMapping("/add")
-    public ResponseEntity<ToDoList> add(@RequestBody ToDoList toDoList) throws IncorrectNameException {
-        if (toDoList.getName() == null || toDoList.getName().trim().length() == 0) {
+    public ResponseEntity<ToDoListDto> add(@RequestBody ToDoListDto toDoListDto) throws IncorrectNameException {
+        ToDoList toDoList = toDoListMapper.toEntity(toDoListDto);
+        toDoList = toDoListService.add(toDoList);
+        toDoListDto = toDoListMapper.toDTO(toDoList);
+        
+        if (toDoListDto.getName() == null || toDoListDto.getName().trim().length() == 0) {
             throw new IncorrectNameException();
         }
         return new ResponseEntity<>(HttpStatus.CREATED);
@@ -50,9 +55,14 @@ public class ToDoListController {
      * Метод который обнавляет список задач
      */
     @PutMapping("/update")
-    public ResponseEntity update(@RequestBody ToDoList toDoList){
+    public ResponseEntity update(@RequestBody ToDoListDto toDoListDto) throws IncorrectNameException{
 
+        ToDoList toDoList = toDoListMapper.toEntity(toDoListDto);
         final boolean updated = toDoListService.update(toDoList);
+
+        if (toDoList.getName() == null || toDoList.getName().trim().length() == 0) {
+            throw new IncorrectNameException();
+        }
 
         return updated
                 ? new ResponseEntity<>(HttpStatus.OK)
@@ -66,9 +76,10 @@ public class ToDoListController {
     public ResponseEntity<ToDoList> findById(@PathVariable UUID id) {
 
         ToDoList toDoList = toDoListService.findById(id);
+        ToDoListDto toDoListDto = toDoListMapper.toDTO(toDoList);
         return toDoList != null
-                ? new ResponseEntity<>(toDoList, HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                ? new ResponseEntity(toDoListDto, HttpStatus.OK)
+                : new ResponseEntity(HttpStatus.NOT_FOUND);
     }
 
     /**
@@ -81,7 +92,7 @@ public class ToDoListController {
 
         return deleted
                 ? new ResponseEntity<>(HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
+                : new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
     }
 
     /**

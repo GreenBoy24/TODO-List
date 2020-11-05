@@ -1,9 +1,13 @@
 package com.example.todo.list.controller;
 
+import com.example.todo.list.dto.TaskDto;
 import com.example.todo.list.entity.Task;
 import com.example.todo.list.exception.IncorrectNameException;
+import com.example.todo.list.mapper.TaskMapper;
 import com.example.todo.list.search.TaskSearch;
 import com.example.todo.list.services.TaskService;
+import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.domain.Page;
@@ -18,15 +22,12 @@ import java.util.*;
  * @autor Пётр
  */
 @RestController
+@RequiredArgsConstructor
 @ComponentScan(basePackages = {"com.example.todo.list.*"})
 @RequestMapping("/task")
 public class TaskController {
     private final TaskService taskService;
-
-    @Autowired
-    public TaskController(TaskService taskService) {
-        this.taskService = taskService;
-    }
+    private final TaskMapper taskMapper;
 
     @GetMapping(value="")
     public String hello() {
@@ -37,8 +38,12 @@ public class TaskController {
      * Метод который добавляет задачу
      */
     @PostMapping("/add")
-    public ResponseEntity<Task> add(@RequestBody Task task) throws IncorrectNameException {
-        if (task.getName() == null || task.getTitle().trim().length() == 0) {
+    public ResponseEntity<Task> add(@RequestBody TaskDto taskDto) throws IncorrectNameException {
+        Task task = taskMapper.toEntity(taskDto);
+        task= taskService.add(task);
+        taskDto = taskMapper.toDTO(task);
+
+        if (taskDto.getName() == null || taskDto.getName().trim().length() == 0) {
             throw new IncorrectNameException();
         }
         return new ResponseEntity<>(HttpStatus.CREATED);
@@ -48,12 +53,12 @@ public class TaskController {
      * Метод который обнавляет задачу
      */
     @PutMapping("/update")
-    public ResponseEntity<Task> update(@RequestBody Task task) {
-
+    public ResponseEntity<TaskDto> update(@RequestBody TaskDto taskDto) {
+        Task task = taskMapper.toEntity(taskDto);
         final boolean updated = taskService.update(task);
 
         return updated
-                ? new ResponseEntity<>(HttpStatus.OK)
+                ? new ResponseEntity<>(taskDto,HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
 
     }
@@ -83,11 +88,11 @@ public class TaskController {
      * Метод который показывает задачу по идентификатору
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Task> findById(@PathVariable UUID id) {
-
+    public ResponseEntity<TaskDto> findById(@PathVariable UUID id) {
         Task task = taskService.findById(id);
-        return task != null
-                ? new ResponseEntity<>(task, HttpStatus.OK)
+        TaskDto taskDto = taskMapper.toDTO(task);
+        return taskDto != null
+                ? new ResponseEntity<>(taskDto, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
@@ -103,7 +108,7 @@ public class TaskController {
 
         PageRequest pageRequest = PageRequest.of(taskSearch.getPageNumber(), taskSearch.getPageSize(), sort);
 
-        Page result = taskService.findByParams(task.getId(), task.getName(), task.getCompleated(), task.getCreatedDate(), task.getChangedDate(), task.getPriority(), pageRequest);
+        Page result = taskService.findByParams(task.getId(), task.getName(), task.getCompleted(), task.getCreatedDate(), task.getChangedDate(), task.getPriority(), pageRequest);
 
         return new ResponseEntity<Page>(result, HttpStatus.OK);
 
@@ -113,9 +118,10 @@ public class TaskController {
      * Метод который обнавляет статус задачи
      */
     @PutMapping("/state/{id}")
-    public ResponseEntity<Task> changeDoneStat(@PathVariable UUID id) {
+    public ResponseEntity<TaskDto> changeDoneStat(@PathVariable UUID id) {
 
         Task task = taskService.isCompleat(id);
-        return new ResponseEntity<>(task, HttpStatus.OK);
+        TaskDto taskDto = taskMapper.toDTO(task);
+        return new ResponseEntity<>(taskDto, HttpStatus.OK);
     }
 }

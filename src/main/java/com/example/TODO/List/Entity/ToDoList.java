@@ -20,7 +20,6 @@ public class ToDoList implements Serializable {
     /** Поле идентификатора */
     @Id
     @Column(name = "id", nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private UUID id;
 
     /** Поле имени */

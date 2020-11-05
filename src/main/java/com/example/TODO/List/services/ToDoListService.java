@@ -1,7 +1,9 @@
 package com.example.todo.list.services;
 
 import com.example.todo.list.entity.ToDoList;
+import com.example.todo.list.mapper.ToDoListMapper;
 import com.example.todo.list.repository.ToDoListRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -13,13 +15,11 @@ import java.util.UUID;
  * @author Пётр
  */
 @Service
+@RequiredArgsConstructor
 public class ToDoListService implements ServiceForToDoList {
 
     private final ToDoListRepository repository;
-
-    public ToDoListService(ToDoListRepository repository) {
-        this.repository = repository;
-    }
+    //private final ToDoListMapper toDoListMapper;
 
     @Override
     public ToDoList add(ToDoList toDoList) {

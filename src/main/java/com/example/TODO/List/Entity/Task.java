@@ -2,23 +2,23 @@ package com.example.todo.list.entity;
 
 import lombok.*;
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.UUID;
 
 /**
  * Cущность задачи
- * @autor Пётр
+ * @author Пётр
  */
 
 @Entity
 @Data
-@Table(name = "task")
-public class Task {
+@Table(name = "Task")
+public class Task implements Serializable {
 
     /** Поле идентификатора */
     @Id
     @Column(name = "id",nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private UUID id;
 
     /** Поле имени */
@@ -33,8 +33,8 @@ public class Task {
 
     /** Поле сделано или нет */
     @Basic
-    @Column(name = "compleated",nullable = false)
-    private boolean compleated;
+    @Column(name = "completed",nullable = false)
+    private boolean completed;
 
     /** Поле даты создания */
     @Basic
@@ -49,7 +49,7 @@ public class Task {
     /** Поле срочности*/
     @Basic
     @Column(name = "priority",nullable = false)
-    private Integer priority;
+    private int priority;
 
     /**
      * Конструктор - создание нового объекта
@@ -58,12 +58,18 @@ public class Task {
         id = UUID.randomUUID();
         createdDate = new Date();
         changedDate = new Date();
-        compleated = false;
-        priority = 0;
+        completed = false;
+        priority = 1;
     }
 
-    public boolean getCompleated(){
-        return compleated;
+    public boolean getCompleted(){
+        return completed;
     }
     
 }
+
+
+
+
+
+

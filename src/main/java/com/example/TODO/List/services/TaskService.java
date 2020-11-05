@@ -1,10 +1,14 @@
 package com.example.todo.list.services;
 
 import com.example.todo.list.entity.Task;
+import com.example.todo.list.mapper.TaskMapper;
 import com.example.todo.list.repository.TaskRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -14,13 +18,12 @@ import java.util.UUID;
  * @author Пётр
  */
 @Service
+@RequiredArgsConstructor
+@Transactional
 public class TaskService implements ServiceForTask {
 
     private final TaskRepository repository;
-
-    public TaskService(TaskRepository repository) {
-        this.repository = repository;
-    }
+    //private final TaskMapper taskMapper;
 
     @Override
     public Task add(Task task) {
@@ -57,7 +60,7 @@ public class TaskService implements ServiceForTask {
 
     public Task isCompleat(UUID id){
         Task task = findById(id);
-        task.setCompleated(!task.getCompleated());
+        task.setCompleted(!task.getCompleted());
         repository.save(task);
         return task;
     }

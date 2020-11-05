@@ -17,7 +17,7 @@ public interface TaskRepository extends JpaRepository<Task, UUID> {
 
     @Query("SELECT p FROM Task p where " +
             "(:name is null or lower(p.name) like lower(concat('%', :name,'%'))) and" +
-            "(:completed is null or p.compleated=:completed) and " +
+            "(:completed is null or p.completed=:completed) and " +
             "(:createdDate is null or p.createdDate=:createdDate) and " +
             "(:changedDate is null or p.changedDate=:changedDate) and " +
             "(:priority is null or p.priority=:priority) and " +
